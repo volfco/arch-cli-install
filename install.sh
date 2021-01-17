@@ -1,29 +1,17 @@
 #! /bin/bash
 
-# This is Krushn's Arch Linux Installation Script.
-# Visit krushndayshmookh.github.io/krushn-arch for instructions.
-
-echo "Krushn's Arch Installer"
-
-# Set up network connection
-read -p 'Are you connected to internet? [y/N]: ' neton
-if ! [ $neton = 'y' ] && ! [ $neton = 'Y' ]
-then 
-    echo "Connect to internet to continue..."
-    exit
-fi
+# assume IP/Mask is $1
+# assume Gateway is $2
+# assume DNS is Gateway
+IPADDR="$1"
+GATEWY="$2"
+DNS="$2"
 
 # Filesystem mount warning
 echo "This script will create and format the partitions as follows:"
 echo "/dev/sda1 - 512Mib will be mounted as /boot/efi"
 echo "/dev/sda2 - 8GiB will be used as swap"
 echo "/dev/sda3 - rest of space will be mounted as /"
-read -p 'Continue? [y/N]: ' fsok
-if ! [ $fsok = 'y' ] && ! [ $fsok = 'Y' ]
-then 
-    echo "Edit the script to continue..."
-    exit
-fi
 
 # to create the partitions programatically (rather than manually)
 # https://superuser.com/a/984637
