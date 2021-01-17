@@ -1,5 +1,8 @@
 #! /bin/bash
 
+# Wipe the existing disk
+wipefs -af /dev/sda
+
 # Filesystem mount warning
 echo "This script will create and format the partitions as follows:"
 echo "/dev/sda1 - 512Mib will be mounted as /boot/efi"
