@@ -88,12 +88,7 @@ echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDCT+nucANjleLvdumjMM3+2NYUGepV4492Xw
 
 systemctl enable NetworkManager.service
 systemctl enable sshd.service
-
+exit
 EOT
 
-# Finish
-echo "If post-install.sh was run succesfully, you will now have a fully working bootable Arch Linux system installed."
-echo "The only thing left is to reboot into the new system."
-echo "Press any key to reboot or Ctrl+C to cancel..."
-read tmpvar
 reboot
