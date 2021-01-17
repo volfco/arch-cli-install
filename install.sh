@@ -91,4 +91,3 @@ systemctl enable sshd.service
 exit
 EOT
 
-reboot
