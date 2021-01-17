@@ -59,7 +59,7 @@ mkswap /dev/sda2
 swapon /dev/sda2
 
 # Install Arch Linux
-pacstrap /mnt base linux linux-firmware efibootmgr grub os-prober intel-ucode amd-ucode systemd-networkd openssh mkinitcpio vi nano
+pacstrap /mnt base linux linux-firmware efibootmgr grub os-prober intel-ucode amd-ucode openssh mkinitcpio vi nano
 
 # Generate fstab
 genfstab -U /mnt >> /mnt/etc/fstab
