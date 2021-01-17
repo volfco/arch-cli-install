@@ -43,13 +43,13 @@ mkfs.fat -F32 /dev/sda1
 timedatectl set-ntp true
 
 # Set Mirror
-echo "Server = https://ftp.osuosl.org/pub/archlinux/$repo/os/$arch" > /etc/pacman.d/mirrorlist
-echo "Server = https://mirrors.rit.edu/archlinux/$repo/os/$arch" >> /etc/pacman.d/mirrorlist
+echo "Server = https://ftp.osuosl.org/pub/archlinux/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist
+echo "Server = https://mirrors.rit.edu/archlinux/\$repo/os/\$arch" >> /etc/pacman.d/mirrorlist
 
 # Initate pacman keyring
 pacman-key --init
 pacman-key --populate archlinux
-pacman-key --refresh-keys
+# pacman-key --refresh-keys
 
 # Mount the partitions
 mount /dev/sda3 /mnt
