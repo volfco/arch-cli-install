@@ -59,7 +59,7 @@ mkswap /dev/sda2
 swapon /dev/sda2
 
 # Install Arch Linux
-pacstrap /mnt base linux linux-firmware efibootmgr grub os-prober intel-ucode amd-ucode openssh mkinitcpio vi nano
+pacstrap /mnt base linux linux-firmware efibootmgr grub os-prober intel-ucode amd-ucode openssh mkinitcpio vi nano xfsprogs 
 
 # Generate fstab
 genfstab -U /mnt >> /mnt/etc/fstab
@@ -86,7 +86,7 @@ echo -e "password\npassword" | passwd
 mkdir -p /root/.ssh
 echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDCT+nucANjleLvdumjMM3+2NYUGepV4492XwvMVLOEjiVoQmquhqvhAPUQ8vF7Y/wBKBJy0uVRt433eZYgFEilJ8SnaiUq/pHy15dzhdLuEkiiLLW3yzxLfS7DUDASfRX9mNBlE/WZSBJsk7lgjMr93rm9d3KUxW5CH8BSF+RMZ1r2Rto+c5BG8NlL4l3XiHhNtIrOjuycgyjVUuIvy9CBBbKxcYVo9c2L9iM/s5BcffmTh9JmVZ8wJhSqI9yLXAgFEvFoDAcUkxW1le9WWbU+Z8MQU4HU1u1RnJ3CFkGy8zdDkkhm/AIZd3LZw5TSh1d8qgN7Hp6ETuLjPtJem/FckVdwNJWQqmkwrXd6xOwcpkiBqH6gX/1Jy+f0gW0rP0yG8x6NiWMQNNYeI2ZwGk9DEdVN0QH6OOcdSkn+pU8YjcyDbQTBRqb0jfb22SAz2OUSlupXU003pl3PAZQRnFSSma0J6WJpuf7IEeNCnR2e2wgfXt8nPkzLdMEsAXAVGbE=" > /root/.ssh/authorized_keys
 
-systemctl enable NetworkManager.service
+systemctl enable systemd-networkd.service
 systemctl enable sshd.service
 exit
 EOT
