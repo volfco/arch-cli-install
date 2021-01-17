@@ -47,8 +47,8 @@ echo "Server = https://ftp.osuosl.org/pub/archlinux/\$repo/os/\$arch" > /etc/pac
 echo "Server = https://mirrors.rit.edu/archlinux/\$repo/os/\$arch" >> /etc/pacman.d/mirrorlist
 
 # Initate pacman keyring
-pacman-key --init
-pacman-key --populate archlinux
+# pacman-key --init
+# pacman-key --populate archlinux
 # pacman-key --refresh-keys
 
 # Mount the partitions
