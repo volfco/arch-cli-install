@@ -1,12 +1,5 @@
 #! /bin/bash
 
-# assume IP/Mask is $1
-# assume Gateway is $2
-# assume DNS is Gateway
-IPADDR="$1"
-GATEWY="$2"
-DNS="$2"
-
 # Filesystem mount warning
 echo "This script will create and format the partitions as follows:"
 echo "/dev/sda1 - 512Mib will be mounted as /boot/efi"
@@ -40,11 +33,15 @@ sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << EOF | fdisk /dev/sda
 EOF
 
 # Format the partitions
-mkfs.ext4 /dev/sda3
+mkfs.xfs /dev/sda3
 mkfs.fat -F32 /dev/sda1
 
 # Set up time
 timedatectl set-ntp true
+
+# Set Mirror
+echo "Server = https://ftp.osuosl.org/pub/archlinux/$repo/os/$arch" > /etc/pacman.d/mirrorlist
+echo "Server = https://mirrors.rit.edu/archlinux/$repo/os/$arch" >> /etc/pacman.d/mirrorlist
 
 # Initate pacman keyring
 pacman-key --init
