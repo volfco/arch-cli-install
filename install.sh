@@ -81,7 +81,8 @@ mkinitcpio -P
 grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=arch
 grub-mkconfig -o /boot/grub/grub.cfg
 
-echo -e "[Match]\nName=enp3s0\n\n[Network]\nDHCP=yes" > /etc/systemd/network/20-wired.network
+ACTIVE_NIC=$(networkctl --no-pager --no-legend list | grep routable | awk '{print $2}')
+echo -e "[Match]\nName=$ACTIVE_NIC\n\n[Network]\nDHCP=yes" > /etc/systemd/network/20-wired.network
 
 # root password
 echo -e "password\npassword" | passwd 
