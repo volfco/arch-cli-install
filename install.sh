@@ -23,6 +23,8 @@ echo "$EFI_PART - 512Mib will be mounted as /boot/efi"
 echo "$SWP_PART - 8GiB will be used as swap"
 echo "$ROT_PART - rest of space will be mounted as /"
 
+sleep 10
+
 # to create the partitions programatically (rather than manually)
 # https://superuser.com/a/984637
 sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << EOF | fdisk "$BASE"
