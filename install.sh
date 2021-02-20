@@ -25,35 +25,38 @@ echo "$ROT_PART - rest of space will be mounted as /"
 
 sleep 10
 
-# to create the partitions programatically (rather than manually)
-# https://superuser.com/a/984637
-sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << EOF | fdisk "$BASE"
+
+sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << EOF | gdisk "$BASE"
   o # clear the in memory partition table
+  y # answer yes
+  
   n # new partition
-  p # primary partition
   1 # partition number 1
-    # default - start at beginning of disk 
+  #  # default - start at beginning of disk 
   +512M # 512 MB boot parttion
+  EF00 # File System type (Linux filesystem)
+  
   n # new partition
-  p # primary partition
-  2 # partion number 2
-    # default, start immediately after preceding partition
+  2  # partion number 2
+  #  # default, start immediately after preceding partition
   +8G # 8 GB swap parttion
+  8300 # File System type (Linux filesystem)
+  
   n # new partition
-  p # primary partition
   3 # partion number 3
     # default, start immediately after preceding partition
     # default, extend partition to end of disk
-  a # make a partition bootable
-  1 # bootable partition is partition 1 -- /dev/sda1
+  8300 # File System type (Linux filesystem)
+  
   p # print the in-memory partition table
   w # write the partition table
+  y # answer yes
   q # and we're done
 EOF
 
 # Format the partitions
 "mkfs.$FS_TYPE" -f "$ROT_PART"
-mkfs.fat -F32 "$EFI_PART"
+mkfs.vfat -F32 -n EFI "$EFI_PART"
 
 # Set up time
 timedatectl set-ntp true
@@ -69,8 +72,8 @@ echo "Server = https://mirrors.rit.edu/archlinux/\$repo/os/\$arch" >> /etc/pacma
 
 # Mount the partitions
 mount "$ROT_PART" /mnt
-mkdir -pv /mnt/boot/efi
-mount "$EFI_PART" /mnt/boot/efi
+mkdir -pv /mnt/boot
+mount "$EFI_PART" /mnt/boot
 mkswap "$SWP_PART"
 swapon "$SWP_PART"
 
