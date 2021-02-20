@@ -53,7 +53,7 @@ EOF
 
 # Format the partitions
 "mkfs.$FS_TYPE" -f "$ROT_PART"
-mkfs.fat -F32 "$SWP_PART"
+mkfs.fat -F32 "$EFI_PART"
 
 # Set up time
 timedatectl set-ntp true
@@ -75,7 +75,7 @@ mkswap "$SWP_PART"
 swapon "$SWP_PART"
 
 # Install Arch Linux
-pacstrap /mnt base linux linux-firmware efibootmgr grub os-prober intel-ucode amd-ucode openssh mkinitcpio vi nano xfsprogs 
+pacstrap /mnt base linux linux-firmware efibootmgr os-prober intel-ucode amd-ucode openssh mkinitcpio vi nano xfsprogs f2fs-tools
 
 # Generate fstab
 genfstab -U /mnt >> /mnt/etc/fstab
@@ -94,8 +94,7 @@ echo "LANG=en_US.UTF-8" >> /etc/locale.conf
 mkinitcpio -P
 
 # bootloader
-grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=arch
-grub-mkconfig -o /boot/grub/grub.cfg
+bootctl install
 
 ACTIVE_NIC=$(networkctl --no-pager --no-legend list | grep routable | awk '{print $2}')
 echo -e "[Match]\nName=$ACTIVE_NIC\n\n[Network]\nDHCP=yes" > /etc/systemd/network/20-wired.network
