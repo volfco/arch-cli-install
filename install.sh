@@ -1,17 +1,31 @@
-#! /bin/bash
+#!/bin/bash
+
+if [[ -e /dev/nvme0n1 ]]; then
+  BASE="/dev/nvme0n1"
+  EFI_PART="/dev/nvme0n1p1"
+  SWP_PART="/dev/nvme0n1p2"
+  ROT_PART="/dev/nvme0n1p3"
+  FS_TYPE="f2fs"
+else
+  BASE="/dev/sda"
+  EFI_PART="/dev/sda1"
+  SWP_PART="/dev/sda2"
+  ROT_PART="/dev/sda3"
+  FS_TYPE="xfs"
+fi
 
 # Wipe the existing disk
-wipefs -af /dev/sda
+wipefs -af "$BASE"
 
 # Filesystem mount warning
 echo "This script will create and format the partitions as follows:"
-echo "/dev/sda1 - 512Mib will be mounted as /boot/efi"
-echo "/dev/sda2 - 8GiB will be used as swap"
-echo "/dev/sda3 - rest of space will be mounted as /"
+echo "$EFI_PART - 512Mib will be mounted as /boot/efi"
+echo "$SWP_PART - 8GiB will be used as swap"
+echo "$ROT_PART - rest of space will be mounted as /"
 
 # to create the partitions programatically (rather than manually)
 # https://superuser.com/a/984637
-sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << EOF | fdisk /dev/sda
+sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << EOF | fdisk "$BASE"
   o # clear the in memory partition table
   n # new partition
   p # primary partition
@@ -36,8 +50,8 @@ sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << EOF | fdisk /dev/sda
 EOF
 
 # Format the partitions
-mkfs.xfs -f /dev/sda3
-mkfs.fat -F32 /dev/sda1
+"mkfs.$FS_TYPE" -f "$ROT_PART"
+mkfs.fat -F32 "$SWP_PART"
 
 # Set up time
 timedatectl set-ntp true
@@ -52,11 +66,11 @@ echo "Server = https://mirrors.rit.edu/archlinux/\$repo/os/\$arch" >> /etc/pacma
 # pacman-key --refresh-keys
 
 # Mount the partitions
-mount /dev/sda3 /mnt
+mount "$ROT_PART" /mnt
 mkdir -pv /mnt/boot/efi
-mount /dev/sda1 /mnt/boot/efi
-mkswap /dev/sda2
-swapon /dev/sda2
+mount "$EFI_PART" /mnt/boot/efi
+mkswap "$SWP_PART"
+swapon "$SWP_PART"
 
 # Install Arch Linux
 pacstrap /mnt base linux linux-firmware efibootmgr grub os-prober intel-ucode amd-ucode openssh mkinitcpio vi nano xfsprogs 
