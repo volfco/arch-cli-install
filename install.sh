@@ -126,9 +126,11 @@ pacman-key --populate archlinux
 # Mount the partitions
 mount "${ROT_PART}" /mnt
 if [[ -e "${LIB_PART}" ]]; then
+  test -e /mnt/var/lib || mkdir /mnt/var/lib
   mount "${LIB_PART}" /mnt/var/lib
 fi
 if [[ -e "${OPT_PART}" ]]; then
+  test -e /mnt/opt || mkdir /mnt/opt
   mount "${OPT_PART}" /mnt/opt
 fi
 mkdir -pv /mnt/boot/efi
