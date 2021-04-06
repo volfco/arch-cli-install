@@ -185,5 +185,4 @@ echo -e "y" | sudo -u nobody HOME=/tmp makepkg -si
 
 lspci | grep I219-V > /dev/null && sudo -u nobody HOME=/tmp trizen -S --noconfirm e1000e-dkms
 
-
 EOT
