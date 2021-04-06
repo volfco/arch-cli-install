@@ -121,7 +121,7 @@ echo "Server = https://mirrors.rit.edu/archlinux/\$repo/os/\$arch" >>/etc/pacman
 # Initate pacman keyring
 pacman-key --init
 pacman-key --populate archlinux
-pacman-key --refresh-keys
+# pacman-key --refresh-keys
 
 # Mount the partitions
 mount "${ROT_PART}" /mnt
