@@ -7,16 +7,16 @@ if [[ -e /dev/nvme0n1 ]]; then
   EFI_PART="/dev/nvme0n1p1"
   SWP_PART="/dev/nvme0n1p2"
   ROT_PART="/dev/nvme0n1p3"
-  LIB_PART="/dev/nvme0n1p4"
-  OPT_PART="/dev/nvme0n1p5"
+  LIB_PART="/dev/nvme0n1p5"
+  OPT_PART="/dev/nvme0n1p6"
   FS_TYPE="f2fs"
 else
   BASE="/dev/sda"
   EFI_PART="/dev/sda1"
   SWP_PART="/dev/sda2"
   ROT_PART="/dev/sda3"
-  LIB_PART="/dev/sda4"
-  OPT_PART="/dev/sda5"
+  LIB_PART="/dev/sda5"
+  OPT_PART="/dev/sda6"
   FS_TYPE="xfs"
 fi
 
@@ -86,9 +86,12 @@ elif [[ "$1" == "container" ]]; then
   3 # partion number 3
     # default, start immediately after preceding partition
   +40G # Make 40G Disk
+  Y # Say Yes (if prompted. if not, doesn't do anything)
 
   n # new partition
   e # extended partition
+    # default first sector
+    # last sector of desk
 
   n # new partition
     # default, start immediately after preceding partition (fdisk detects that we're in extended land)
@@ -100,7 +103,6 @@ elif [[ "$1" == "container" ]]; then
 
   p # print the in-memory partition table
   w # write the partition table
-  q # and we're done
 EOF
 
   # Format /, /var/lib, /opt
