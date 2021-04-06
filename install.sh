@@ -139,7 +139,7 @@ mkswap "${SWP_PART}"
 swapon "${SWP_PART}"
 
 # Install Arch Linux
-pacstrap /mnt base linux linux-firmware linux-headers ethtool efibootmgr grub os-prober intel-ucode amd-ucode openssh mkinitcpio vi nano xfsprogs f2fs-tools git fakeroot binutils sudo dkms
+pacstrap /mnt base linux linux-firmware linux-headers ethtool efibootmgr grub os-prober intel-ucode amd-ucode openssh mkinitcpio vi nano xfsprogs f2fs-tools git fakeroot binutils sudo dkms pacutils perl-libwww perl-term-ui perl-json perl-data-dump perl-lwp-protocol-https perl-term-readline-gnu
 
 # Generate fstab
 genfstab -U /mnt >>/mnt/etc/fstab
