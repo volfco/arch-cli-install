@@ -139,7 +139,7 @@ mkswap "${SWP_PART}"
 swapon "${SWP_PART}"
 
 # Install Arch Linux
-pacstrap /mnt base linux linux-firmware linux-headers ethtool efibootmgr grub os-prober intel-ucode amd-ucode openssh mkinitcpio vi nano xfsprogs f2fs-tools git fakeroot binutils sudo
+pacstrap /mnt base linux linux-firmware linux-headers ethtool efibootmgr grub os-prober intel-ucode amd-ucode openssh mkinitcpio vi nano xfsprogs f2fs-tools git fakeroot binutils sudo dkms
 
 # Generate fstab
 genfstab -U /mnt >>/mnt/etc/fstab
@@ -161,7 +161,7 @@ mkinitcpio -P
 grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=arch
 grub-mkconfig -o /boot/grub/grub.cfg
 
-#sed -i 'GRUB_CMDLINE_LINUX_DEFAULT=' /boot/grub/grub.cfg
+sed -i -r 's/(GRUB_CMDLINE_LINUX_DEFAULT=")(.*?)(")/\1msr.allow_writes=on mitigations=off\3/g' /boot/grub/grub.cfg
 
 ACTIVE_NIC=$(networkctl --no-pager --no-legend list | grep routable | awk '{print $2}')
 echo -e "[Match]\nName=$ACTIVE_NIC\n\n[Network]\nDHCP=yes" > /etc/systemd/network/20-wired.network
@@ -181,8 +181,17 @@ cd /tmp
 git clone https://aur.archlinux.org/trizen.git
 chmod 777 -R /tmp/trizen
 cd /tmp/trizen
-echo -e "y" | sudo -u nobody HOME=/tmp makepkg -si
+sudo -u nobody HOME=/tmp makepkg
+pacman --noconfirm -U /tmp/trizen/trizen-*.pkg.tar.zst
 
-lspci | grep I219-V > /dev/null && sudo -u nobody HOME=/tmp trizen -S --noconfirm e1000e-dkms
+if lspci | grep I219-V > /dev/null &> /dev/null; then
+  cd /tmp
+  git clone https://aur.archlinux.org/e1000e-dkms.git
+  chmod 777 -R /tmp/e1000e-dkms
+  cd /tmp/e1000e-dkms
+  sudo -u nobody HOME=/tmp makepkg
+  pacman --noconfirm -U /tmp/e1000e-dkms/e1000e-dkms-*.pkg.tar.zst
+fi
+
 
 EOT
