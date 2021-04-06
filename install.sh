@@ -188,7 +188,7 @@ mkswap "$SWP_PART"
 swapon "$SWP_PART"
 
 # Install Arch Linux
-pacstrap /mnt base linux linux-firmware efibootmgr grub os-prober intel-ucode amd-ucode openssh mkinitcpio vi nano xfsprogs f2fs-tools git fakeroot binutils sudo
+pacstrap /mnt base linux linux-firmware linux-headers efibootmgr grub os-prober intel-ucode amd-ucode openssh mkinitcpio vi nano xfsprogs f2fs-tools git fakeroot binutils sudo
 
 # Generate fstab
 genfstab -U /mnt >> /mnt/etc/fstab
@@ -223,6 +223,7 @@ systemctl enable systemd-resolved.service
 systemctl enable sshd.service
 
 echo "nobody ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+cd /tmp
 git clone https://aur.archlinux.org/trizen.git
 chmod 777 -R /tmp/trizen 
 cd /tmp/trizen
