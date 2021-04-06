@@ -188,7 +188,7 @@ mkswap "$SWP_PART"
 swapon "$SWP_PART"
 
 # Install Arch Linux
-pacstrap /mnt base linux linux-firmware linux-headers efibootmgr grub os-prober intel-ucode amd-ucode openssh mkinitcpio vi nano xfsprogs f2fs-tools git fakeroot binutils sudo
+pacstrap /mnt base linux linux-firmware linux-headers ethtool efibootmgr grub os-prober intel-ucode amd-ucode openssh mkinitcpio vi nano xfsprogs f2fs-tools git fakeroot binutils sudo
 
 # Generate fstab
 genfstab -U /mnt >> /mnt/etc/fstab
@@ -228,6 +228,8 @@ git clone https://aur.archlinux.org/trizen.git
 chmod 777 -R /tmp/trizen 
 cd /tmp/trizen
 echo -e "y" | sudo -u nobody makepkg -si
+
+lspci | grep I219-V > /dev/null && sudo -u nobody HOME=/tmp trizen -S --noconfirm e1000e-dkms
 
 exit
 EOT
