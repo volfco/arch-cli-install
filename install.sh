@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 if [[ -e /dev/nvme0n1 ]]; then
   BASE="/dev/nvme0n1"
   EFI_PART="/dev/nvme0n1p1"
@@ -69,8 +71,8 @@ if [[ -z "$1" ]]; then
     w # write the partition table
     q # and we're done
   EOF
-  # format /
   
+  # format /
   "mkfs.$FS_TYPE" -f "$ROT_PART"
   
 elif [[ "$1" == "container" ]]; then
@@ -99,6 +101,7 @@ elif [[ "$1" == "container" ]]; then
     w # write the partition table
     q # and we're done
   EOF
+  
   # Format /, /var/lib, /opt
   "mkfs.$FS_TYPE" -f "$ROT_PART"
   "mkfs.$FS_TYPE" -f "$LIB_PART"
@@ -166,6 +169,7 @@ systemctl enable systemd-resolved.service
 systemctl enable sshd.service
 
 echo "nobody ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
 cd /tmp
 git clone https://aur.archlinux.org/trizen.git
 chmod 777 -R /tmp/trizen 
@@ -176,4 +180,3 @@ lspci | grep I219-V > /dev/null && sudo -u nobody HOME=/tmp trizen -S --noconfir
 
 exit
 EOT
-
